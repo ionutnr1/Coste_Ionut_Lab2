@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Coste_Ionut_Lab2.Data;
 using Coste_Ionut_Lab2.Models;
 
-namespace Coste_Ionut_Lab2.Pages.Authors
+namespace Coste_Ionut_Lab2.Pages.Categories
 {
     public class IndexModel : PageModel
     {
@@ -19,13 +19,13 @@ namespace Coste_Ionut_Lab2.Pages.Authors
             _context = context;
         }
 
-        public IList<Author> Author { get;set; } = default!;
+        public IList<Category> Category { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            if (_context.Author != null)
+            if (_context.Category != null)
             {
-                Author = await _context.Author.ToListAsync();
+                Category = await _context.Category.ToListAsync();
             }
         }
     }

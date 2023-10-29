@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Coste_Ionut_Lab2.Models.Authors
+namespace Coste_Ionut_Lab2.Models
 {
-    public class Authors
+    public class Author
     {
         [Required]
         public int ID { get; set; }

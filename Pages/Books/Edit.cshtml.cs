@@ -11,7 +11,7 @@ using Coste_Ionut_Lab2.Models;
 
 namespace Coste_Ionut_Lab2.Pages.Books
 {
-    public class EditModel : PageModel
+    public class EditModel : BookCategoriesPageModel
     {
         private readonly Coste_Ionut_Lab2.Data.Coste_Ionut_Lab2Context _context;
 
@@ -30,11 +30,19 @@ namespace Coste_Ionut_Lab2.Pages.Books
                 return NotFound();
             }
 
+            Book = await _context.Book
+                .Include(b => b.Publisher)
+                .Include(b => b.BookCategories).ThenInclude(b => b.Category)
+                .Include(b => b.Author)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.ID == id);
             var book =  await _context.Book.FirstOrDefaultAsync(m => m.ID == id);
             if (book == null)
             {
                 return NotFound();
             }
+            PopulateAssignedCategoryData(_context, Book);
+
             Book = book;
             ViewData["PublisherID"] = new SelectList(_context.Set<Publisher>(), "ID", "PublisherName");
             return Page();
@@ -42,37 +50,42 @@ namespace Coste_Ionut_Lab2.Pages.Books
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int ? id, string[] selectedCategories)
         {
-            if (!ModelState.IsValid)
+            if (id == null)
             {
-                return Page();
+                return NotFound();
             }
 
-            _context.Attach(Book).State = EntityState.Modified;
-
-            try
+            var book = await _context.Book.FirstOrDefaultAsync(m => m.ID == id);
+            if (book == null)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BookExists(Book.ID))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
-            return RedirectToPage("./Index");
-        }
+            Book = await _context.Book
+                    .Include(b => b.Publisher)
+                    .Include(b => b.BookCategories).ThenInclude(b => b.Category)
+                    .Include(b => b.Author)
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(m => m.ID == id);
 
-        private bool BookExists(int id)
-        {
-          return (_context.Book?.Any(e => e.ID == id)).GetValueOrDefault();
+            if (Book == null)
+            {
+                return NotFound();
+            }
+            //apelam PopulateAssignedCategoryData pentru o obtine informatiile necesare checkbox-
+            //urilor folosind clasa AssignedCategoryData
+            PopulateAssignedCategoryData(_context, Book);
+            var authorList = _context.Author.Select(x => new
+            {
+                x.ID,
+                FullName = x.LastName + " " + x.FirstName
+            });
+            ViewData["AuthorID"] = new SelectList(authorList, "ID", "FullName");
+            ViewData["PublisherID"] = new SelectList(_context.Publisher, "ID",
+           "PublisherName");
+            return Page();
         }
     }
 }

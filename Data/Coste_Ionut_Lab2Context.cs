@@ -19,13 +19,14 @@ namespace Coste_Ionut_Lab2.Data
 
         public DbSet<Coste_Ionut_Lab2.Models.Publisher>? Publisher { get; set; }
 
+        public DbSet<Coste_Ionut_Lab2.Models.Author>? Author { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            object value = modelBuilder.Entity<Book>().HasOne(b => b.AuthorNavigation).WithMany(a => a.Books).HasForeignKey(b => b.AuthorID).OnDelete(DeleteBehavior.Cascade);
-        }
 
-        public DbSet<Coste_Ionut_Lab2.Models.Authors>? Authors { get; set; }
+        }
+        public DbSet<Coste_Ionut_Lab2.Models.Category>? Category { get; set; }
+
     }
 }
