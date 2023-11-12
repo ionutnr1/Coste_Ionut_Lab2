@@ -25,6 +25,7 @@ namespace Coste_Ionut_Lab2.Models
 
         public int AuthorID { get; set; }
 
+
         public ICollection<BookCategory> BookCategories { get; set;}
     }
 

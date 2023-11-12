@@ -23,10 +23,16 @@ namespace Coste_Ionut_Lab2.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+            modelBuilder.Entity<Book>()
+                .HasOne(e => e.Borrowing)
+               .WithOne(e => e.Book)
+                .HasForeignKey<Borrowing>("BookID");
 
         }
         public DbSet<Coste_Ionut_Lab2.Models.Category>? Category { get; set; }
+        public DbSet<Coste_Ionut_Lab2.Models.Member>? Member { get; set; }
+        public DbSet<Coste_Ionut_Lab2.Models.Borrowing>? Borrowing { get; set; }
+
 
     }
 }

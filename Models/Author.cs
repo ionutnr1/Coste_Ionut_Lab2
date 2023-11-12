@@ -8,13 +8,11 @@ namespace Coste_Ionut_Lab2.Models
         [Required]
         public int ID { get; set; }
 
-        [Required]
         [Display(Name = "First Name")]
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
 
-        [Required]
         [Display(Name = "Last Name")]
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
 
         [Display(Name = "Full Name")]
         public string FullName
@@ -24,6 +22,6 @@ namespace Coste_Ionut_Lab2.Models
                 return FirstName + " " + LastName;
             }
         }
-        public ICollection<Book> Books { get;  set; }
+        public ICollection<Book>? Books { get;  set; }
     }
 }
